@@ -25,6 +25,12 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
+@interface AppDelegate () <RCTBridgeDelegate>
+ 
+@property (nonatomic, strong) NSDictionary *launchOptions;
+ 
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -33,7 +39,21 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
   
-  RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
+  self.launchOptions = launchOptions;
+  #ifdef DEBUG
+    [self initializeReactNativeApp];
+  #else
+    EXUpdatesAppController *controller = [EXUpdatesAppController sharedInstance];
+    controller.delegate = self;
+    [controller startAndShowLaunchScreen:self.window];
+  #endif
+ 
+ return bridge;
+}
+ 
+- (RCTBridge *)initializeReactNativeApp
+{
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:self.launchOptions];
   RCTRootView *rootView = [self.reactDelegate createRootViewWithBridge:bridge moduleName:@"main" initialProperties:nil];
   rootView.backgroundColor = [UIColor whiteColor];
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -57,8 +77,12 @@ static void InitializeFlipper(UIApplication *application) {
  #ifdef DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
  #else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  return [[EXUpdatesAppController sharedInstance] launchAssetUrl];
  #endif
+}
+
+- (void)appController:(EXUpdatesAppController *)appController didStartWithSuccess:(BOOL)success {
+  appController.bridge = [self initializeReactNativeApp];
 }
 
 // Linking API
