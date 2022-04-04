@@ -9,7 +9,7 @@ export default function App() {
 
   const handleTimer = () => {
     const getTitle = () => {
-      switch(title){
+      switch (title) {
         case "START":
           return "PAUSE";
         case "PAUSE":
@@ -17,10 +17,13 @@ export default function App() {
         case "RESUME":
           return "PAUSE";
       }
-    }
+    };
     setTitle(() => getTitle());
-    setTimer((title === 'START' || title === 'RESUME') && setInterval(() => setCount(count => count + 1), 1000));
-    title === 'PAUSE' && clearInterval(timer);
+    setTimer(
+      (title === "START" || title === "RESUME") &&
+        setInterval(() => setCount((count) => count + 10), 10)
+    );
+    title === "PAUSE" && clearInterval(timer);
   };
 
   const handleReset = () => {
@@ -32,10 +35,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>{count}</Text>
+      <Text>
+        <span>{("0" + Math.floor((count / 60000) % 60)).slice(-2)}</span>:
+        <span>{("0" + Math.floor((count / 1000) % 60)).slice(-2)}</span>:
+        <span>{("0" + (count / 10) % 1000).slice(-2)}</span>
+      </Text>
       <View>
-        <Button title={title} color="#648787" onPress={() => handleTimer()} />
-        <Button title="RESET" color="#648787" onPress={() => handleReset()} />
+        <Button title={title} color="#648787" onPress={handleTimer} />
+        <Button title="RESET" color="#648787" onPress={handleReset} />
       </View>
       <StatusBar style="auto" />
     </View>
