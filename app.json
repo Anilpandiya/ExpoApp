@@ -1,14 +1,19 @@
 {
   "expo": {
-    "name": "ExpoApp",
-    "slug": "ExpoApp",
+    "name": "Stoper",
+    "slug": "Stoper",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
       "package": "com.heisenberg_1994.ExpoApp"
-    }
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
+    "icon": "./assets/icon.png"
   },
-  "name": "ExpoApp"
+  "name": "Stoper"
 }

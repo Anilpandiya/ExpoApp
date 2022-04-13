@@ -21,7 +21,7 @@ export default function App() {
     setTitle(() => getTitle());
     setTimer(
       (title === "START" || title === "RESUME") &&
-        setInterval(() => setCount((count) => count + 10), 10)
+        setInterval(() => setCount((prevCount) => prevCount + 10), 10)
     );
     title === "PAUSE" && clearInterval(timer);
   };
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   timer: {
     width: 300,
     height: 300,
-    lineHeight: 330,
+    lineHeight: 300,
     borderRadius: 150,
     fontSize: 70,
     color: "#fff",
